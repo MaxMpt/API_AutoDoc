@@ -183,10 +183,9 @@ def get_all_persons(
     return result.scalars().all()
 
 @app.get("/persons-status", response_model=List[Person])
-def get_persons_status_work(person: PersonBase, db: Session = Depends(get_db)):    
-    query = db.query(PersonModel).where(person.is_active == True)
-    result = db.execute(query)
-    return result.scalars().all()
+def get_persons_status_work(db: Session = Depends(get_db)):
+    query = db.execute(select(PersonModel).where(PersonModel.is_active == True)).scalars().all()
+    return query
 
 
 @app.post("/persons", response_model=Person, status_code=status.HTTP_201_CREATED)
